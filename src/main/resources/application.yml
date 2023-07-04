@@ -1,0 +1,18 @@
+# 내장 웹 서버의 포트번호 지정
+server:
+  port: 80
+  
+ # 로그레벨 지정하기
+logging:
+  level:
+# 애플리케이션의 기본 로그레벨을 info로 지정함
+    root: info
+# org.springframework.web 패키지에 대해서는 로그레벨을 trace로 지정함
+    '[org.springframework.web]': trace
+    
+    
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
