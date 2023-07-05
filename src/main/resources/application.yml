@@ -9,10 +9,31 @@ logging:
     root: info
 # org.springframework.web 패키지에 대해서는 로그레벨을 trace로 지정함
     '[org.springframework.web]': trace
+# mybatis 실행시 SQL 및 SQL 실행결과가 로그로 출력된다.
+    '[kr.co.jhta.mapper]': trace
     
     
 spring:
+# 커넥션 풀 설정
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: hr
+    password: zxcv1234
   mvc:
     view:
+# spring web mvc의 뷰 템플릿 경로 설정
       prefix: /WEB-INF/views/
       suffix: .jsp
+      
+# mybatis 설정      
+mybatis:
+# 매퍼 XML 파일이 위치한 경로 지정
+  mapper-locations:
+  - META-INF/mybatis/mappers/*.xml
+# resultType, parameterType으로 자주 사용되는 클래스에 대한 별칭정보를 획득할 수 있는 패키지 지정
+  type-aliases-package: kr.co.jhta.vo
+  configuration:
+# NULL값이 허용되는 컬럼에 NULL값을 추가할 수 있도록 지정  
+    jdbc-type-for-null: 'NULL'
+    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
