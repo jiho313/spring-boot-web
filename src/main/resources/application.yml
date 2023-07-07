@@ -8,7 +8,7 @@ logging:
 # 애플리케이션의 기본 로그레벨을 info로 지정함
     root: info
 # org.springframework.web 패키지에 대해서는 로그레벨을 trace로 지정함
-    '[org.springframework.web]': trace
+#    '[org.springframework.web]': trace
 # mybatis 실행시 SQL 및 SQL 실행결과가 로그로 출력된다.
     '[kr.co.jhta.mapper]': trace
     

@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Alias("Job")
 public class Job {
 	
@@ -16,4 +14,9 @@ public class Job {
 	private String title;
 	private int minSalary;
 	private int maxSalary;
+	
+	public Job() {}
+	public Job(String id) {
+		this.id = id;
+	}
 }

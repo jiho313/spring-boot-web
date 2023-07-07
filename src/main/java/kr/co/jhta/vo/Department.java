@@ -12,4 +12,10 @@ public class Department {
 	private String name;
 	private Employee manager;
 	private Integer loc;
+	
+	public Department() {}
+	public Department (int id) {
+		this.id = id;
+	}
+	
 }

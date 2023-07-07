@@ -14,10 +14,16 @@ public class Employee {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String phoneNumber;
 	private Date hireDate;
 	private Job job;
 	private Double salary;
 	private Double commissionPct;
 	private Employee manager;
 	private Department department;
+	
+	public Employee() {};
+	public Employee(int id) {
+		this.id = id;
+	}
 }

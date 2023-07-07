@@ -1,5 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.jhta.mapper.EmployeeDao">
-
+	
+<!-- 	<resultMap type="kr.co.jhta.vo.Employee" id="EmployeeResultMap">
+		<id property="id" column="employee_id" />
+		<result property="firstName" column="first_name" />
+		<result property="lastName" column="last_name" />
+		<result property="email" column="email" />
+		<result property="hireDate" column="hire_date" />
+		<result property="salary" column="salary" />
+		<result property="commissionPct" column="commissionPct" />
+		<association property="job" 
+					 select="kr.co.jhta.hr.mapper.JobMapper.getJobById" 
+					 column="JOB_ID"/>
+		<association property="manager" 
+					 select="getEmployeeById" 
+					 column="MANAGER_ID"/>
+		<association property="department" 
+					 select="kr.co.jhta.hr.mapper.DepartmentMapper.getDepartmentById" 
+					 column="DEPARTMENT_ID"/>
+	</resultMap> -->
+	<!-- <select id="getEmployeesByJobId" parameterType="string" resultMap="EmployeeResultMap"> -->
+	
+	<select id="getEmployeesByJobId" parameterType="string" resultType="kr.co.jhta.vo.Employee">
+		select a.employee_id		as id,
+			   a.first_name			as firstName,
+			   a.last_name			as lastName,
+			   a.hire_date			as hireDate,
+			   b.department_name	as "department.name",
+			   a.salary
+		from employees a, departments b
+		where a.department_id = b.department_id(+)
+		and a.job_id = #{value}
+		order by a.employee_id
+	</select>
+	
+	<select id="getEmployeesByDeptId" parameterType="int" resultType="kr.co.jhta.vo.Employee">
+		select a.employee_id		as id,
+			   a.first_name			as firstName,
+			   a.last_name			as lastName,
+			   a.hire_date			as hireDate,
+			   b.department_name	as "department.name",
+			   a.salary
+		from employees a, departments b
+		where a.department_id = b.department_id(+)
+		and a.department_id = #{value}
+		order by a.employee_id
+	</select>
+	
+	<insert id="insertEmployee" parameterType="kr.co.jhta.vo.Employee">
+		insert into employees
+		(employee_id, first_name, last_name, email, phone_number, hire_date, job_id,
+		 salary, commission_pct, manager_id, department_id)
+		values
+		(employees_seq.nextval, #{firstName}, #{lastName}, #{email}, #{phoneNumber}, #{hireDate},
+		 #{job.id}, #{salary}, #{commissionPct}, #{manager.id}, #{department.id})
+	</insert>
 </mapper>

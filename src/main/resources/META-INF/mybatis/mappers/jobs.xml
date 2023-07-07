@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.jhta.mapper.JobDao">
+	<resultMap type="kr.co.jhta.vo.Job" id="JobResultMap">
+		<id property="id" column="job_id"/>
+		<result property="title" column="job_title" />
+		<result property="minSalary" column="min_salary" />
+		<result property="maxSalary" column="max_salary" />
 
+	</resultMap>
+	<select id="getJobs" resultMap="JobResultMap">
+		select job_id,
+			   job_title,
+			   min_salary,
+			   max_salary
+		from jobs
+		order by job_id 
+	</select>
+
+	<insert id="insertJob" parameterType="kr.co.jhta.vo.Job">
+		insert into jobs
+		(job_id, job_title, min_salary, max_salary)
+		values
+		(#{id}, #{title}, #{minSalary}, #{maxSalary})
+	</insert>
+	
 </mapper>
