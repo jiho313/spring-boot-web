@@ -10,5 +10,6 @@ import kr.co.jhta.vo.Department;
 public interface DepartmentDao {
 	
 	List<Department> getDepartments();
+	Department getDepartmentById(int deptId);
 
 }

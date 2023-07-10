@@ -20,16 +20,41 @@
 			<div class="card">
 				<div class="card-header">부서 목록</div>			
 				<div class="card-body">
-					<ul class="list-group overflow-auto" style="max-height: 500px;">
+					<div class="list-group overflow-auto" id="dept-list" style="max-height: 500px;">
 						<c:forEach var="dept" items="${depts }">
-						<li class="list-group-item">${dept.name }</li>
+						<a href="detail?id=${dept.id }" class="list-group-item list-group-item-action" id="dept-${dept.id }" onclick="getDeptDetail(event, ${dept.id})">${dept.name }</a>
 						</c:forEach>
-					</ul>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-  
 </div>
+<script type="text/javascript">
+	function getDeptDetail(event, deptId) {
+		event.preventDefault();
+		
+		// 모든 a태그를 선택한다. 배열을 반환 forEach 사용가능
+		let elements = document.querySelectorAll("#dept-list a");
+		// elements.forEach(el => el.classList.remove('active'));
+		elements.forEach(function(el, index) {
+			el.classList.remove('active');
+		})
+		
+		let clickedElement = document.querySelector("#dept-" + deptId);
+		clickedElement.classList.add('active');
+		
+		let xhr = new XMLHttpRequest();
+		// 메소드를 실행하는 것이 아니라, xhr 프로퍼티에 이벤트 핸들러 함수를 등록하는 것
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				let text = xhr.responseText;
+				alert(text);
+			}
+		}
+		xhr.open("get", "detail?id=" + deptId);
+		xhr.send();
+	}
+</script>
 </body>
 </html>

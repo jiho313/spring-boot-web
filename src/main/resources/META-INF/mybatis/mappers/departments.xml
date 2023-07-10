@@ -13,4 +13,16 @@
 		order by 
 			department_id asc
 	</select>
+	
+	<select id="getDepartmentById" parameterType="int" resultType="kr.co.jhta.vo.Department">
+		select 
+			department_id		as id,
+			department_name		as name,
+			manager_id			as "manager.id",
+			location_id			as loc
+		from
+			departments
+		where 
+			department_id = #{value}
+	</select>
 </mapper>
