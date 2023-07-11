@@ -16,5 +16,7 @@ public interface EmployeeDao {
 	
 	int getTotalRows(Map<String, Object> param);
 	List<Employee> getEmployees(Map<String, Object> param);
+	
+	Employee getEmployeeById(int empId);
 
 }

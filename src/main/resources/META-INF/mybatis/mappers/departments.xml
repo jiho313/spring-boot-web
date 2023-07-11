@@ -15,14 +15,17 @@
 	</select>
 	
 	<select id="getDepartmentById" parameterType="int" resultType="kr.co.jhta.vo.Department">
-		select 
-			department_id		as id,
-			department_name		as name,
-			manager_id			as "manager.id",
-			location_id			as loc
-		from
-			departments
-		where 
-			department_id = #{value}
+		select
+			D.department_id      as id,
+	        D.department_name      as name,
+	        D.manager_id         as "manager.id",
+	        M.first_name         as "manager.firstName",
+	        M.last_name            as "manager.lastName",
+	        D.location_id         as loc
+     	from
+       		departments D, employees M
+   	    where
+       	 	D.manager_id = M.employee_id(+)
+       	 	and D.department_id = #{value}
 	</select>
 </mapper>

@@ -1,21 +1,33 @@
 package kr.co.jhta.service;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.jhta.dto.Pagination;
+import kr.co.jhta.form.AddEmployeeFileForm;
 import kr.co.jhta.form.AddEmployeeForm;
 import kr.co.jhta.form.AddJobForm;
 import kr.co.jhta.mapper.DepartmentDao;
 import kr.co.jhta.mapper.EmployeeDao;
+import kr.co.jhta.mapper.EmployeeFileDao;
 import kr.co.jhta.mapper.JobDao;
 import kr.co.jhta.model.EmployeeList;
 import kr.co.jhta.vo.Department;
 import kr.co.jhta.vo.Employee;
+import kr.co.jhta.vo.EmployeeFile;
 import kr.co.jhta.vo.Job;
 
 /**
@@ -27,11 +39,17 @@ import kr.co.jhta.vo.Job;
 @Service
 public class HrService {
 
+	@Value("${hr.employee.xls.save-directory}")
+	private String directory;
+	
 	@Autowired
 	private DepartmentDao departmentDao;
 
 	@Autowired
 	private EmployeeDao employeeDao;
+	
+	@Autowired
+	private EmployeeFileDao employeeFileDao;
 
 	@Autowired
 	private JobDao jobDao;
@@ -153,4 +171,105 @@ public class HrService {
 
 		return result;
 	}
+	
+	/**
+	 * 직원아이디를 전달받아서 직원상세정보를 반환한다.
+	 * @param empId 직원아이디
+	 * @return 직원상세정보가 포함된 Employee객체
+	 */
+	public Employee getEmployee(int empId) {
+		return employeeDao.getEmployeeById(empId);
+	}
+	
+	/**
+	 * 일괄등록폼에서 전달한 정보를 저장하는 폼객체를 전달받아서 정보를 테이블에 저장하고,
+	 * 첨부파일도 지정된 폴더에 저장한다.
+	 * @param form
+	 */
+	public void createEmployeeFile(AddEmployeeFileForm form) throws Exception {
+		
+		// 폼 입력값 조회하기(제목, 업로드된 첨부파일정보)
+		String title = form.getTitle();
+		MultipartFile xlsfile = form.getXlsfile();
+		
+		// 필드가 존재한다면 멀티파트파일은 null일 수 없기 때문에 파일의 여부를 확인한다.
+		// disabled 되어있거나 input박스가 아예 존재하지 않는다면, 객체가 생성되지 않는다(null).
+		if (!xlsfile.isEmpty()) {
+			// 파일명 조회하기
+			String filename = xlsfile.getOriginalFilename();
+			
+			// EmployeeFile 객체를 생성해서 제목, 첨부파일명을 저장해서 테이블에 저장시킨다.
+			EmployeeFile employeeFile = new EmployeeFile();
+			employeeFile.setTitle(title);
+			employeeFile.setName(filename);
+			
+			employeeFileDao.insertEmployeeFile(employeeFile);
+			
+			// 첨부파일을 지정된 폴더에 저장시키기
+			File file = new File(directory, filename);
+			xlsfile.transferTo(file);
+		}
+		
+	}
+	
+	/**
+	 * 모든 직원등록파일을 반환한다.
+	 * @return 직원등록파일 목록
+	 */
+	public List<EmployeeFile> getAllEmployeeFiles() {
+		return employeeFileDao.getEmployeeFiles();
+	}
+	
+	public void addEmployees(int fileId) throws Exception {
+		EmployeeFile employeeFile = employeeFileDao.getEmployeeFileById(fileId);
+		String filename = employeeFile.getName();
+		File file = new File(directory, filename);
+		
+		// 지정된 파일이 가르키는 엑셀파일을 표현하는 Workbook 객체 생성
+		Workbook workbook = new XSSFWorkbook(file);
+		
+		// 엑셀파일에서 데이터가 표현된 시트를 표현하는 객체 획득하기
+		Sheet sheet = workbook.getSheet("Sheet1");
+		
+		for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+			Row row = sheet.getRow(rowIndex);
+			
+			String firstName = row.getCell(0).getStringCellValue();
+			String lastName = row.getCell(1).getStringCellValue();
+			String email = row.getCell(2).getStringCellValue();
+			String phoneNumber = row.getCell(3).getStringCellValue();
+			Date hireDate = row.getCell(4).getDateCellValue();
+			String jobId = row.getCell(5).getStringCellValue();
+			double salary = row.getCell(6).getNumericCellValue();
+			String commCellValue = row.getCell(7).getStringCellValue();
+			Double commissionPct =  StringUtils.hasText(commCellValue) ? Double.parseDouble(commCellValue) : null;
+			int managerId = (int) row.getCell(8).getNumericCellValue();
+			int departmentId = (int) row.getCell(9).getNumericCellValue();
+			
+			Employee employee = new Employee();
+			employee.setFirstName(firstName);
+			employee.setLastName(lastName);
+			employee.setEmail(email);
+			employee.setPhoneNumber(phoneNumber);
+			employee.setHireDate(hireDate);
+			employee.setJob(new Job(jobId));
+			employee.setSalary(salary);
+			employee.setCommissionPct(commissionPct);
+			employee.setManager(new Employee(managerId));
+			employee.setDepartment(new Department(departmentId));
+			
+			employeeDao.insertEmployee(employee);
+		}
+		
+		workbook.close();
+		
+	}
 }
+
+
+
+
+
+
+
+

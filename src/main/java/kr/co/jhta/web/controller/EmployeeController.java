@@ -10,15 +10,18 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.jhta.form.AddEmployeeFileForm;
 import kr.co.jhta.form.AddEmployeeForm;
 import kr.co.jhta.model.EmployeeList;
 import kr.co.jhta.service.HrService;
 import kr.co.jhta.vo.Department;
 import kr.co.jhta.vo.Employee;
+import kr.co.jhta.vo.EmployeeFile;
 import kr.co.jhta.vo.Job;
 import lombok.extern.slf4j.Slf4j;
 
@@ -101,5 +104,34 @@ public class EmployeeController {
 		return employees;
 	}
 	
+	// 직원 상세 정보를 응답으로 보내는 요청핸들러 메소드
+	@GetMapping("/detail")
+	@ResponseBody
+	public Employee getEmployeeDetail(@RequestParam("id") int empId) {
+		Employee employee = hrService.getEmployee(empId);
+		return employee;
+	}
+	
+	@PostMapping("/upload")
+	public String uploadEmployeeFile(AddEmployeeFileForm form) throws Exception {
+		hrService.createEmployeeFile(form);
+		
+		return "redirect:files";
+	}
+	
+	@GetMapping("/files")
+	public String files(Model model) {
+		List<EmployeeFile> files = hrService.getAllEmployeeFiles();
+		model.addAttribute("files", files);
+		
+		return "employees/files";
+	}
+	
+	@GetMapping("/add-all")
+	public String addEmployees(@RequestParam("id")int fileId) throws Exception {
+		hrService.addEmployees(fileId);
+		
+		return "redirect:files";
+	}
 	
 }

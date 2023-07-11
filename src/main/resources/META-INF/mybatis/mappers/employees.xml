@@ -40,6 +40,7 @@
 			   a.first_name			as firstName,
 			   a.last_name			as lastName,
 			   a.hire_date			as hireDate,
+			   a.job_id				as "job.id",
 			   b.department_name	as "department.name",
 			   a.salary
 		from employees a, departments b
@@ -132,6 +133,32 @@
       )
       where
          rownumber between #{begin} and #{end}
+   </select>
+   
+   <select id="getEmployeeById" parameterType="int" resultType="kr.co.jhta.vo.Employee">
+   		select
+         A.employee_id         as id,
+         A.first_name         as firstName,
+         A.last_name            as lastName,
+         A.email,
+         A.phone_number         as phoneNumber,
+         A.hire_date            as hireDate,
+         A.job_id            as "job.id",
+         B.job_title            as "job.title",
+         A.salary,
+         A.commission_pct      as commissionPct,
+         A.manager_id         as "manager.id",
+         C.first_name         as "manager.firstName",
+         C.last_name            as "manager.lastName",
+         A.department_id         as "department.id",
+         D.department_name      as "department.name"
+      from
+         employees A, jobs B, employees C, departments D
+      where
+         A.job_id = B.job_id
+         and A.manager_id = C.employee_id(+)
+         and A.department_id = D.department_id(+)
+         and A.employee_id = #{value}
    </select>
 </mapper>
 
