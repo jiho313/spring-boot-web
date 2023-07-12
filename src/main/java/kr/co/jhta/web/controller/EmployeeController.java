@@ -100,9 +100,10 @@ public class EmployeeController {
 	// 신규직원 등록 요청과 매핑되는 요청핸들러 메소드
 	@PostMapping("/add")
 	public String createEmployee(AddEmployeeForm form) {
-		hrService.createEmployee(form);
+		throw new RuntimeException("파이널 프로젝트 잘하장!!");
+		//hrService.createEmployee(form);
 		
-		return "redirect:list";
+		//return "redirect:list";
 	}
 	
 	// 직원상세정보 화면 요청과 매핑되는 요청핸들러 메소드
