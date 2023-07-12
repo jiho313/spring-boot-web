@@ -22,6 +22,31 @@
 	</resultMap> -->
 	<!-- <select id="getEmployeesByJobId" parameterType="string" resultMap="EmployeeResultMap"> -->
 	
+	<select id="getAllEmployees" resultType="kr.co.jhta.vo.Employee">
+		select 
+			a.employee_id		as id,
+			a.first_name		as firstName,
+			a.last_name			as lastName,
+			a.email,
+			a.phone_number		as phoneNumber,
+			a.hire_date			as hireDate,
+			a.job_id			as "job.id",
+			a.salary,
+			a.commission_pct	as commissionPct,
+			a.manager_id		as "manager.id",
+			b.first_name		as "manager.firstName",
+			b.last_name			as "manager.lastName",
+			a.department_id		as "department.id",
+			c.department_name	as "department.name"
+		from
+			employees a, employees b, departments c
+		where
+			a.manager_id = b.employee_id(+)
+			and a.department_id = c.department_id(+)
+		order by
+			a.employee_id asc
+	</select>
+	
 	<select id="getEmployeesByJobId" parameterType="string" resultType="kr.co.jhta.vo.Employee">
 		select a.employee_id		as id,
 			   a.first_name			as firstName,

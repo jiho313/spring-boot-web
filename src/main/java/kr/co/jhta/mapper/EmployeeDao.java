@@ -10,6 +10,7 @@ import kr.co.jhta.vo.Employee;
 @Mapper
 public interface EmployeeDao {
 	
+	List<Employee> getAllEmployees();
 	List<Employee> getEmployeesByJobId(String jobId);
 	List<Employee> getEmployeesByDeptId(int deptId);
 	void insertEmployee(Employee employee);

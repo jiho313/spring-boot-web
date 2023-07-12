@@ -21,7 +21,10 @@
 			<div class="card">
 				<div class="card-header">
 					직원 목록
-					<a href="add" class="btn btn-primary btn-sm float-end">신규 직원 등록</a>
+					<span class="float-end">
+					<a href="files" class="btn btn-outline-primary btn-sm">일괄등록</a>
+					<a href="add" class="btn btn-primary btn-sm">신규 직원 등록</a>
+					</span>
 				</div>			
 				<div class="card-body">
 					<div class="d-flex jutstify-content-start mb-3">
@@ -116,6 +119,10 @@
 								<button type="button" class="btn btn-outline-primary btn-sm" onclick="searchEmployees()">검색</button>
 							</div>
 						</form>
+					</div>
+					
+					<div class="text-end">
+						<a href="xls" class="btn btn-success btn-sm">엑셀다운로드</a>
 					</div>
 				</div>
 			</div>

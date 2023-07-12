@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.All.MaxOccurs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.jhta.form.AddEmployeeFileForm;
 import kr.co.jhta.form.AddEmployeeForm;
@@ -23,12 +26,24 @@ import kr.co.jhta.vo.Department;
 import kr.co.jhta.vo.Employee;
 import kr.co.jhta.vo.EmployeeFile;
 import kr.co.jhta.vo.Job;
+import kr.co.jhta.web.view.EmployeesExcelView;
+import kr.co.jhta.web.view.FileDownloadView;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/emp")
 @Slf4j
 public class EmployeeController {
+	
+	@Value("${hr.employee.xls.save-directory}")
+	private String directory;
+	
+	// 객체 주입
+	@Autowired
+	private FileDownloadView fileDownloadView;
+	
+	@Autowired
+	private EmployeesExcelView employeesExcelView;
 	
 	@Autowired
 	private HrService hrService;
@@ -132,6 +147,47 @@ public class EmployeeController {
 		hrService.addEmployees(fileId);
 		
 		return "redirect:files";
+	}
+	
+	/*
+	 * 엑셀파일 다운로드 요청
+	 * 요청방식: GET
+	 * 요청URL: http://localhost/emp/download?id=xxx
+	 */
+	@GetMapping("/download")
+	public ModelAndView fileDownload(@RequestParam("id")int fileId) throws Exception {
+		
+		EmployeeFile employeeFile = hrService.getEmployeeFile(fileId);
+		
+		// ModelAndView 객체에 파일다운로드 응답을 보내는 View객체를 저장한다.
+		//					   디렉토리 경로를 저장한다.
+		//					   파일명을 저장한다.
+		// 디렉토리를 직접 삽입하는 건 좋지 않고 컨트롤러에서 처리하게 해야한다.
+		
+		ModelAndView modelAndView = new ModelAndView();
+		// 파일을 응답으로 보내는 fileDownloadView객체를 ModelAndView객체에 저장함
+		modelAndView.setView(fileDownloadView);
+		// FileDownloadView객체에 전달할 정보를 ModelAndView객체에 저장함
+		modelAndView.addObject("directory", directory);
+		modelAndView.addObject("filename", employeeFile.getName());
+		
+		return modelAndView;
+	}
+	
+	/*
+	 * 전체 직원 목록에 대한 엑셀파일 요청
+	 * 요청방식: GET
+	 * 요청URL : http://localhost/emp/xls
+	 */
+	@GetMapping("/xls")
+	public ModelAndView downloadEmployeesXls() {
+		List<Employee> employees = hrService.getAllEmployees();
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setView(employeesExcelView);
+		modelAndView.addObject("items", employees);
+		
+		return modelAndView;
 	}
 	
 }

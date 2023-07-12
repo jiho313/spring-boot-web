@@ -63,6 +63,7 @@ public class HrService {
 		return departmentDao.getDepartments();
 	}
 
+	
 	/**
 	 *  지정된 부서아이디에 해당하는 부서정보를 반환한다.
 	 * @param deptId 부서아이디
@@ -79,6 +80,10 @@ public class HrService {
 	 */
 	public List<Job> getAllJobs() {
 		return jobDao.getJobs();
+	}
+	
+	public List<Employee> getAllEmployees() {
+		return employeeDao.getAllEmployees();
 	}
 
 	/**
@@ -263,6 +268,10 @@ public class HrService {
 		
 		workbook.close();
 		
+	}
+	
+	public EmployeeFile getEmployeeFile(int fileId) {
+		return employeeFileDao.getEmployeeFileById(fileId);
 	}
 }
 

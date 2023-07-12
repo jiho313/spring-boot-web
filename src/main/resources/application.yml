@@ -43,4 +43,4 @@ mybatis:
 hr:
   employee:
     xls:
-      save-directory: C:\\eGovFrameDev-4.1.0-Win-64bit\\eGovFrameDev-4.1.0-64bit\\files
+      save-directory: C:\\eGovFrameDev-4.1.0-64bit\\files
