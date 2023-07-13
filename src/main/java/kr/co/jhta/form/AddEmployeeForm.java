@@ -16,6 +16,7 @@ public class AddEmployeeForm {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String password; 
 	private String phoneNumber;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date hireDate;

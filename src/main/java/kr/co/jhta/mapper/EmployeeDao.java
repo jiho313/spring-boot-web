@@ -19,5 +19,6 @@ public interface EmployeeDao {
 	List<Employee> getEmployees(Map<String, Object> param);
 	
 	Employee getEmployeeById(int empId);
+	Employee getEmployeeByEmail(String email);
 
 }

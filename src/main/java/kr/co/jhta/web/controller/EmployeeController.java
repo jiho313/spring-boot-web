@@ -100,17 +100,16 @@ public class EmployeeController {
 	// 신규직원 등록 요청과 매핑되는 요청핸들러 메소드
 	@PostMapping("/add")
 	public String createEmployee(AddEmployeeForm form) {
-		throw new RuntimeException("파이널 프로젝트 잘하장!!");
-		//hrService.createEmployee(form);
+		hrService.createEmployee(form);
 		
-		//return "redirect:list";
+		return "redirect:/";
 	}
 	
-	// 직원상세정보 화면 요청과 매핑되는 요청핸들러 메소드
-	
-	// 직원수정폼 화면 요청과 매핑되는 요청핸들러 메소드
-	
-	// 직원정보 수정요청과 매핑되는 요청핸들러 메소드
+	// 로그인 화면 요청을 처리하는 요청핸들러 메소드
+	@GetMapping("/loginform")
+	public String form() {
+		return "employees/loginform";
+	}
 	
 	// 직원목록정보 요청을 처리하는 요청핸들러 메소드
 	@GetMapping("/empsByDept")
@@ -143,6 +142,7 @@ public class EmployeeController {
 		return "employees/files";
 	}
 	
+	// 직원 일괄 등록 요청을 처리하는 요청핸들러 메소드
 	@GetMapping("/add-all")
 	public String addEmployees(@RequestParam("id")int fileId) throws Exception {
 		hrService.addEmployees(fileId);

@@ -25,13 +25,13 @@
          </ul>
          <ul class="navbar-nav">
             <li class="nav-item">
-               <a class="nav-link" href="/login">로그인</a>
+               <a class="nav-link ${menu eq '로그인' ? 'active' : '' }" href="/emp/loginform">로그인</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="/logout">로그아웃</a>
+               <a class="nav-link" href="/emp/logout">로그아웃</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="/register">회원가입</a>
+               <a class="nav-link" href="/emp/add">회원가입</a>
             </li>
          </ul>
       </div>

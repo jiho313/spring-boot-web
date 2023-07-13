@@ -28,6 +28,7 @@
 			a.first_name		as firstName,
 			a.last_name			as lastName,
 			a.email,
+			a.encrypted_password as encryptedPassword,
 			a.phone_number		as phoneNumber,
 			a.hire_date			as hireDate,
 			a.job_id			as "job.id",
@@ -77,10 +78,10 @@
 	<insert id="insertEmployee" parameterType="kr.co.jhta.vo.Employee">
 		insert into employees
 		(employee_id, first_name, last_name, email, phone_number, hire_date, job_id,
-		 salary, commission_pct, manager_id, department_id)
+		 salary, commission_pct, manager_id, department_id, encrypted_password)
 		values
 		(employees_seq.nextval, #{firstName}, #{lastName}, #{email}, #{phoneNumber}, #{hireDate},
-		 #{job.id}, #{salary}, #{commissionPct}, #{manager.id}, #{department.id})
+		 #{job.id}, #{salary}, #{commissionPct}, #{manager.id}, #{department.id}, #{encryptedPassword})
 	</insert>
 	
 	   <select id="getTotalRows" parameterType="map" resultType="int">
@@ -166,6 +167,7 @@
          A.first_name         as firstName,
          A.last_name            as lastName,
          A.email,
+         a.encrypted_password as encryptedPassword,
          A.phone_number         as phoneNumber,
          A.hire_date            as hireDate,
          A.job_id            as "job.id",
@@ -184,6 +186,33 @@
          and A.manager_id = C.employee_id(+)
          and A.department_id = D.department_id(+)
          and A.employee_id = #{value}
+   </select>
+   
+   <select id="getEmployeeByEmail" parameterType="string" resultType="kr.co.jhta.vo.Employee">
+   		select
+         A.employee_id         as id,
+         A.first_name         as firstName,
+         A.last_name            as lastName,
+         A.email,
+         a.encrypted_password as encryptedPassword,
+         A.phone_number         as phoneNumber,
+         A.hire_date            as hireDate,
+         A.job_id            as "job.id",
+         B.job_title            as "job.title",
+         A.salary,
+         A.commission_pct      as commissionPct,
+         A.manager_id         as "manager.id",
+         C.first_name         as "manager.firstName",
+         C.last_name            as "manager.lastName",
+         A.department_id         as "department.id",
+         D.department_name      as "department.name"
+      from
+         employees A, jobs B, employees C, departments D
+      where
+         A.job_id = B.job_id
+         and A.manager_id = C.employee_id(+)
+         and A.department_id = D.department_id(+)
+         and A.email = #{value}
    </select>
 </mapper>
 

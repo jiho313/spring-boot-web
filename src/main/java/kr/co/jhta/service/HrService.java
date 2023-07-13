@@ -12,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,7 +54,11 @@ public class HrService {
 
 	@Autowired
 	private JobDao jobDao;
-
+	
+	// 비밀번호 암호화 객체
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	/**
 	 * 모든 부서목록을 반환한다.
 	 * 
@@ -130,6 +135,12 @@ public class HrService {
 		// jobId, departmentId, managerId를 제외한 다른 프로퍼티값이 전부 form에서 employee로 복사됨
 		BeanUtils.copyProperties(form, employee);
 
+		// 비밀번호를 암호화해서 저장시키기
+		// 		- 비밀번호 변수 이름이 다르기 때문에 
+		// 		- 암호화한 비밀번호를 실제 vo에 따로 저장
+		String encryptedPassword = passwordEncoder.encode(form.getPassword());
+		employee.setEncryptedPassword(encryptedPassword);
+		
 		Job job = new Job(form.getJobId());
 		employee.setJob(job);
 
