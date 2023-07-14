@@ -35,12 +35,21 @@
 		</dependency>
 
 		<!-- 
+			spring security 태그 라이브러리 의존성
+		 -->
+		<dependency>
+         <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-taglibs</artifactId>
+     	</dependency>
+
+		<!-- 
 			JSP 실행을 지원하는 내장 웹서버(톰캣) 의존성
 		-->
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
+		
 		<!-- 
 			JSTL 라이브러리 의존성
 		-->

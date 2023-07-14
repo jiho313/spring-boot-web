@@ -3,6 +3,7 @@ package kr.co.jhta.web.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import kr.co.jhta.vo.Employee;
 import kr.co.jhta.vo.Job;
 import lombok.extern.slf4j.Slf4j;
 
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @Controller
 @RequestMapping("/job")
 @Slf4j
