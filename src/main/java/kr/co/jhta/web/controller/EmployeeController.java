@@ -4,15 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.All.MaxOccurs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,6 +48,16 @@ public class EmployeeController {
 	
 	@Autowired
 	private HrService hrService;
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/info")
+	public String empInfo(@AuthenticationPrincipal Employee employee, Model model) {
+		log.info("employee -> {}", employee);
+		
+		model.addAttribute("emp",employee);
+		
+		return "employees/info";
+	}
 	
 	// 직원목록 화면 요청과 매핑되는 요청핸들러 메소드
 	@GetMapping("/list")
@@ -91,8 +102,6 @@ public class EmployeeController {
 		
 		model.addAttribute("depts", depts);
 		model.addAttribute("jobs", jobs);
-		
-		
 		
 		return "employees/form";
 	}

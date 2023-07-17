@@ -38,6 +38,9 @@
          <ul class="navbar-nav">
          	<sec:authorize access="isAuthenticated()">
             <li class="nav-item">
+               <a class="nav-link" href="/emp/info">내 정보 보기</a>
+            </li>
+            <li class="nav-item">
                <a class="nav-link" href="/emp/logout">로그아웃</a>
             </li>
             </sec:authorize>

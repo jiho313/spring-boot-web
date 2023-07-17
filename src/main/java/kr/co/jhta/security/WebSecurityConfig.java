@@ -38,6 +38,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * 		- 이 어노테이션은 Spring Security 기능을 활성화하고, Spring Security 관련 설정을
  * 		  자동으로 구성한다.
  */
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 /* @EnableGlobalMethodSecurity(securedEnabled = true)
  * 		- Spring security에서 애플리케이션 내부의 메소드에 접근제어설정(보안설정)을 할 수 있게 한다.
