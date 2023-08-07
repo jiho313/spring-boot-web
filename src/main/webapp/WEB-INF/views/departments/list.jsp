@@ -129,6 +129,87 @@
 </div>
 
 <script type="text/javascript">	
+//jQuery로 작성된 코드
+/* $(function() {
+	// 부트스트랩의 모달 객체 생성하기
+	const empModal = new bootstrap.Modal('#modal-emp-info', {
+	  keyboard: false
+	});
+
+	// 모달 엘리먼트에 이벤트 핸들러 함수 등록하기
+	$("#modal-emp-info").on("hidden.bs.modal", function() {
+		$("#cell-emp-id, #cell-emp-name, #cell-emp-email, #cell-emp-phone, #cell-emp-hiredate, #cell-emp-job, #cell-emp-salary, #cell-emp-comm, #cell-manager-name, #cell-dept-name").text("");
+	});
+
+	// 직원 상세보기 함수
+	function showEmployeeModal(empId) {
+		$.get("/emp/detail?id=" + empId, function(emp) {
+			$("#cell-emp-id").text(emp.id);
+			$("#cell-emp-name").text(emp.firstName);
+			$("#cell-emp-email").text(emp.email);
+			$("#cell-emp-phone").text(emp.phoneNumber);
+			$("#cell-emp-hiredate").text(emp.hireDate.substr(0, 10));
+			$("#cell-emp-job").text(emp.job.id);
+			$("#cell-emp-salary").text(emp.salary);
+			$("#cell-emp-comm").text(emp.commissionPct || '');
+			$("#cell-manager-name").text(emp.manager ? emp.manager.firstName : '');
+			$("#cell-dept-name").text(emp.department ? emp.department.name : '');
+
+			empModal.show();
+		}, "json");
+	}
+
+	// 부서정보 테이블의 값을 삭제하는 함수
+	function clearDeptInfo() {
+		$("#dept-id, #dept-name, #manager-name, #emp-count").text("");
+	}
+
+	// 부서테이블에 부서정보를 출력하는 함수
+	function displayDeptInfo(dept, len) {
+		$("#dept-id").text(dept.id);
+		$("#dept-name").text(dept.name);
+		if (dept.manager) {
+			let fullName = dept.manager.firstName + " " + dept.manager.lastName;
+			$("#manager-name").text(fullName);
+		}
+		$("#emp-count").text(len);
+	}
+
+	// 직원목록 테이블에 직원목록을 출력하는 함수
+	function displayEmployees(employees) {
+		let htmlContent = "";
+		$.each(employees, function(index, emp) {
+			htmlContent += `
+				<tr>
+					<td>${emp.id}</td>
+					<td>${emp.firstName} ${emp.lastName}</td>
+					<td>${emp.job.id}</td>
+					<td>${emp.hireDate.substr(0, 10)}</td>
+					<td>${emp.salary}</td>
+					<th><button class="btn btn-outline-primary btn-sm" onclick="showEmployeeModal(${emp.id})">상세정보</button></th>
+				</tr>
+			`;
+		});
+		$("#table-employees tbody").html(htmlContent);
+	}
+
+	// 부서명 클릭 이벤트 핸들러 함수
+	function getDeptDetail(event, deptId) {
+		event.preventDefault();
+		
+		$("#dept-list a").removeClass('active');
+		$("#dept-" + deptId).addClass('active');
+
+		$.get("detail?id=" + deptId, function(result) {
+			clearDeptInfo();
+			displayDeptInfo(result.dept, result.employees.length);
+			displayEmployees(result.employees);
+		}, "json");
+	}
+}) */
+
+
+
 // 부트스트랩의 모달객체 생성하기
 	const empModal = new bootstrap.Modal('#modal-emp-info', {
 	  keyboard: false

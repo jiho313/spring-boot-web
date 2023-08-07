@@ -17,7 +17,8 @@ import kr.co.jhta.vo.Employee;
 import kr.co.jhta.vo.Job;
 import lombok.extern.slf4j.Slf4j;
 
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+//@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("isAuthenticated()")
 @Controller
 @RequestMapping("/job")
 @Slf4j
